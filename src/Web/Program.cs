@@ -9,20 +9,16 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.AddServiceDefaults();
+
         // Add services to the container.
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
 
-        // Configure API HttpClient
-        var apiBaseUrl = builder.Configuration.GetSection("InventoryApi")["BaseUrl"];
-        if (string.IsNullOrWhiteSpace(apiBaseUrl))
-        {
-            apiBaseUrl = Environment.GetEnvironmentVariable("INVENTORY_API_BASEURL") ?? "https://localhost:7122";
-        }
-
+        // Configure API HttpClient 
         builder.Services.AddHttpClient<IInventoryApiClient, InventoryApiClient>(client =>
         {
-            client.BaseAddress = new Uri(apiBaseUrl!);
+            client.BaseAddress = new Uri("https+http://inventory-api");
         });
 
         var app = builder.Build();
@@ -34,6 +30,8 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
+
+        app.MapDefaultEndpoints();
 
         app.UseHttpsRedirection();
 

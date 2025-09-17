@@ -13,6 +13,8 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.AddServiceDefaults();
+
         // Add services to the container.
         builder.Services.AddAuthorization()
             .AddFastEndpoints()
@@ -26,6 +28,8 @@ public class Program
         builder.Services.AddScoped<IProductService, ProductService>();
 
         var app = builder.Build();
+
+        app.MapDefaultEndpoints();
 
         app.UseHttpsRedirection();
 
