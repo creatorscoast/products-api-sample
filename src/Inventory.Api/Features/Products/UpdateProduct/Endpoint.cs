@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Inventory.Api.Features.Products.UpdateProduct;
 
-[HttpPut("products/id:int"), AllowAnonymous]
+[HttpPut("products/{id:int}"), AllowAnonymous]
 public sealed class Endpoint : Endpoint<Request, Response, Mapper>
 {
     private readonly IProductService _productService;

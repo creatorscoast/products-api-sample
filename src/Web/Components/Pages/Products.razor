@@ -1,0 +1,154 @@
+@page "/products"
+@inject Web.Services.IInventoryApiClient Api
+@rendermode InteractiveServer
+
+<h3>Products</h3>
+
+<EditForm Model="newProduct" OnValidSubmit="CreateAsync">
+    <DataAnnotationsValidator />
+    <div class="mb-2">
+        <label class="form-label">Name</label>
+        <InputText class="form-control" @bind-Value="newProduct.Name" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label">Price</label>
+        <InputNumber class="form-control" @bind-Value="newProduct.Price" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label">Description</label>
+        <InputText class="form-control" @bind-Value="newProduct.Description" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</EditForm>
+
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (products is null)
+        {
+            <tr><td colspan="5">Loading...</td></tr>
+        }
+        else if (!products.Any())
+        {
+            <tr><td colspan="5">No products.</td></tr>
+        }
+        else
+        {
+            @foreach (var p in products!)
+            {
+                <tr>
+                    <td>@p.Id</td>
+                    <td>
+                        @if (editId == p.Id)
+                        {
+                            <InputText class="form-control" @bind-Value="editModel.Name" />
+                        }
+                        else
+                        {
+                            @p.Name
+                        }
+                    </td>
+                    <td>
+                        @if (editId == p.Id)
+                        {
+                            <InputNumber class="form-control" @bind-Value="editModel.Price" />
+                        }
+                        else
+                        {
+                            @p.Price
+                        }
+                    </td>
+                    <td>
+                        @if (editId == p.Id)
+                        {
+                            <InputText class="form-control" @bind-Value="editModel.Description" />
+                        }
+                        else
+                        {
+                            @p.Description
+                        }
+                    </td>
+                    <td class="text-nowrap">
+                        @if (editId == p.Id)
+                        {
+                            <button class="btn btn-sm btn-success me-1" @onclick="() => SaveAsync(p.Id)">Save</button>
+                            <button class="btn btn-sm btn-secondary" @onclick="CancelEdit">Cancel</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-primary me-1" @onclick="() => BeginEdit(p)">Edit</button>
+                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteAsync(p.Id)">Delete</button>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+  </table>
+
+@code {
+    private List<Web.Services.ProductDto>? products;
+    private Web.Services.CreateProductDto newProduct = new();
+    private int? editId;
+    private Web.Services.UpdateProductDto editModel = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        products = (await Api.GetProductsAsync()).ToList();
+        StateHasChanged();
+    }
+
+    private async Task CreateAsync()
+    {
+        await Api.CreateProductAsync(newProduct);
+        newProduct = new();
+        await LoadAsync();
+    }
+
+    private void BeginEdit(Web.Services.ProductDto p)
+    {
+        editId = p.Id;
+        editModel = new Web.Services.UpdateProductDto
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Price = p.Price,
+            Description = p.Description
+        };
+    }
+
+    private void CancelEdit()
+    {
+        editId = null;
+    }
+
+    private async Task SaveAsync(int id)
+    {
+        await Api.UpdateProductAsync(editModel);
+        editId = null;
+        await LoadAsync();
+    }
+
+    private async Task DeleteAsync(int id)
+    {
+        await Api.DeleteProductAsync(id);
+        await LoadAsync();
+    }
+}
+
+
