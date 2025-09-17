@@ -2,6 +2,8 @@
 
 Sample Inventory .NET API using FastEndpoints, Dapper, PostgreSQL, and xUnit integration tests with Testcontainers. This is currently a WIP and contains duplication of mapping and some request/response models. The idea is to evolve and cleanup after the basic vertical slices are setup.
 
+![App](https://github.com/creatorscoast/products-api-sample/blob/main/app.png)
+
 ### Project structure
 
 ```text
