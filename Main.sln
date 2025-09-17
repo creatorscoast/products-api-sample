@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppHost", "src\AppHost\AppH
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefaults", "src\ServiceDefaults\ServiceDefaults.csproj", "{4BCB4F37-E7E0-4CBE-BBBC-C3CE7DF6A309}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{E81B6AB0-05EC-425C-B16E-1D5EB357609D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2CBE31DE-13BA-4387-AA7D-6E9D154C5AF2} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{82B28627-9D72-4AE7-A896-9F98DFF1630B} = {E81B6AB0-05EC-425C-B16E-1D5EB357609D}
+		{4BCB4F37-E7E0-4CBE-BBBC-C3CE7DF6A309} = {E81B6AB0-05EC-425C-B16E-1D5EB357609D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {145E1654-9952-4691-95F8-08FE9423ACCD}

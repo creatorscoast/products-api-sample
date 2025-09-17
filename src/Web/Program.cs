@@ -18,7 +18,7 @@ public class Program
         // Configure API HttpClient 
         builder.Services.AddHttpClient<IInventoryApiClient, InventoryApiClient>(client =>
         {
-            client.BaseAddress = new Uri("https+http://inventory-api");
+            client.BaseAddress = new Uri("https+http://api");
         });
 
         var app = builder.Build();

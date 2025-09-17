@@ -10,7 +10,13 @@ public interface IDbConnectionFactory
 
 public sealed class NpgsqlConnectionFactory : IDbConnectionFactory
 {
-    private readonly string _connectionString;
+    private readonly NpgsqlDataSource _dataSource = null;
+    private readonly string _connectionString = null;
+
+    public NpgsqlConnectionFactory(NpgsqlDataSource npgsqlDataSource)
+    {
+       _dataSource = npgsqlDataSource;
+    }
 
     public NpgsqlConnectionFactory(string connectionString)
     {
@@ -19,10 +25,17 @@ public sealed class NpgsqlConnectionFactory : IDbConnectionFactory
 
     public async Task<IDbConnection> CreateConnectionAsync()
     {
-        var connection = new NpgsqlConnection(_connectionString);
+        if (_dataSource is null)
+        {
+            var connection = new NpgsqlConnection(_connectionString);
 
-        await connection.OpenAsync();
+            await connection.OpenAsync();
 
-        return connection;
+            return connection;
+        }
+
+        var sourceConnection = await _dataSource.OpenConnectionAsync();
+
+        return sourceConnection;
     }
 }

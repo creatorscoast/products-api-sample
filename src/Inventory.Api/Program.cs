@@ -20,10 +20,9 @@ public class Program
             .AddFastEndpoints()
             .SwaggerDocument();
 
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString") ??
-            throw new InvalidProgramException("DefaultConnectionString is required");
-        builder.Services.AddSingleton<IDbConnectionFactory>(_ =>
-            new NpgsqlConnectionFactory(connectionString));
+        builder.AddNpgsqlDataSource("inventorydb");
+
+        builder.Services.AddSingleton<IDbConnectionFactory, NpgsqlConnectionFactory>();
         builder.Services.AddSingleton<DatabaseInitializer>();
         builder.Services.AddScoped<IProductService, ProductService>();
 
